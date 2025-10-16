@@ -1,0 +1,19 @@
+<section class="auth auth-grid">
+  <div class="card auth-card card-elevated">
+    <h2>Create account</h2>
+    {{#if error}}<div class="alert alert-error">{{error}}</div>{{/if}}
+    <form method="post" action="/register" class="form">
+      <label>Name<input type="text" name="name" required></label>
+      <label>Email<input type="email" name="email" required></label>
+      <label>Password<input type="password" name="password" required></label>
+      <label>Role
+        <select name="role" required>
+          <option value="rider">Rider</option>
+          <option value="manager">Manager</option>
+        </select>
+      </label>
+      <button type="submit" class="btn btn-primary">Create account</button>
+    </form>
+    <p class="muted">Have an account? <a href="/login">Login</a></p>
+  </div>
+</section>

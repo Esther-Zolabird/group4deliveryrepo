@@ -1,0 +1,20 @@
+<nav class="navbar">
+  <div class="nav-left">
+    <a class="brand" href="/">Deliveries</a>
+  </div>
+  <div class="nav-right">
+    {{#if currentUser}}
+      {{#if (eq currentUser.role 'manager')}}
+        <a href="/manager">Dashboard</a>
+        <a href="/manager/export/csv">Export CSV</a>
+      {{/if}}
+      {{#if (eq currentUser.role 'rider')}}
+        <a href="/rider">My Deliveries</a>
+      {{/if}}
+      <form class="inline" action="/logout" method="post"><button type="submit" class="btn btn-link">Logout</button></form>
+    {{else}}
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+    {{/if}}
+  </div>
+</nav>

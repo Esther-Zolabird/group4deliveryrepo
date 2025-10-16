@@ -1,0 +1,24 @@
+<section>
+  <h2>Edit Delivery #{{d.id}}</h2>
+  <form method="post" action="/manager/deliveries/{{d.id}}?_method=PUT" class="form">
+    <label>Recipient Name<input name="recipient_name" value="{{d.recipient_name}}" required></label>
+    <label>Phone<input name="recipient_phone" value="{{d.recipient_phone}}" required></label>
+    <label>Address<textarea name="address" required>{{d.address}}</textarea></label>
+    <label>Items<textarea name="items" required>{{itemsList d.items}}</textarea></label>
+    <label>Category
+      <select name="category" required>
+        <option value="delicate" {{#if (eq d.category 'delicate')}}selected{{/if}}>Delicate</option>
+        <option value="non-delicate" {{#if (eq d.category 'non-delicate')}}selected{{/if}}>Non-delicate</option>
+      </select>
+    </label>
+    <label>Date & Time<input type="datetime-local" name="scheduled_at" value="{{d.scheduled_at}}" required></label>
+    <label>Urgency
+      <select name="urgency" required>
+        <option value="low" {{#if (eq d.urgency 'low')}}selected{{/if}}>Low</option>
+        <option value="medium" {{#if (eq d.urgency 'medium')}}selected{{/if}}>Medium</option>
+        <option value="high" {{#if (eq d.urgency 'high')}}selected{{/if}}>High</option>
+      </select>
+    </label>
+    <button class="btn">Save</button>
+  </form>
+</section>
