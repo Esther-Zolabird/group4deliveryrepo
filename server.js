@@ -93,7 +93,7 @@ app.use('/manager', ensureAuth, ensureRole('manager'), managerRoutes.router);
 app.use('/rider', ensureAuth, ensureRole('rider'), riderRoutes.router);
 
 app.get('/', (req, res) => {
-  if (!req.session.user) return res.redirect('/login');
+  if (!req.session.user) return res.render('home');
   if (req.session.user.role === 'manager') return res.redirect('/manager');
   return res.redirect('/rider');
 });

@@ -1,5 +1,17 @@
 <section>
-  <h2>Manager Dashboard</h2>
+  <header class="page-header">
+    <div>
+      <h2>Manager Dashboard</h2>
+      <p class="muted">Create, assign, and monitor deliveries</p>
+    </div>
+    {{#if stats}}
+    <div class="stats">
+      <div class="stat"><div class="stat-value">{{stats.pending}}</div><div class="stat-label">Pending</div></div>
+      <div class="stat"><div class="stat-value">{{stats.inprogress}}</div><div class="stat-label">In Progress</div></div>
+      <div class="stat"><div class="stat-value">{{stats.delivered}}</div><div class="stat-label">Delivered</div></div>
+    </div>
+    {{/if}}
+  </header>
   {{#if error}}<div class="alert alert-error">{{error}}</div>{{/if}}
   <div class="grid two">
     <div>
