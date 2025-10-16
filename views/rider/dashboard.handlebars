@@ -1,0 +1,89 @@
+<section>
+  <h2>My Deliveries</h2>
+
+  <details class="filters" open>
+    <summary>Filters & Sorting</summary>
+    <form method="get" class="form inline">
+      <label>Status
+        <select name="status">
+          <option value="all">All</option>
+          <option value="Pending" {{#if (eq q.status 'Pending')}}selected{{/if}}>Pending</option>
+          <option value="In Progress" {{#if (eq q.status 'In Progress')}}selected{{/if}}>In Progress</option>
+          <option value="Delivered" {{#if (eq q.status 'Delivered')}}selected{{/if}}>Delivered</option>
+        </select>
+      </label>
+      <label>Urgency
+        <select name="urgency">
+          <option value="all">All</option>
+          <option value="low" {{#if (eq q.urgency 'low')}}selected{{/if}}>Low</option>
+          <option value="medium" {{#if (eq q.urgency 'medium')}}selected{{/if}}>Medium</option>
+          <option value="high" {{#if (eq q.urgency 'high')}}selected{{/if}}>High</option>
+        </select>
+      </label>
+      <label>Category
+        <select name="category">
+          <option value="all">All</option>
+          <option value="delicate" {{#if (eq q.category 'delicate')}}selected{{/if}}>Delicate</option>
+          <option value="non-delicate" {{#if (eq q.category 'non-delicate')}}selected{{/if}}>Non-delicate</option>
+        </select>
+      </label>
+      <label>Recipient<input name="recipient" value="{{q.recipient}}"></label>
+      <label>Date From<input type="datetime-local" name="date_from" value="{{q.date_from}}"></label>
+      <label>Date To<input type="datetime-local" name="date_to" value="{{q.date_to}}"></label>
+      <label>Sort
+        <select name="sort">
+          <option value="">Scheduled asc</option>
+          <option value="status" {{#if (eq q.sort 'status')}}selected{{/if}}>Status</option>
+          <option value="urgency" {{#if (eq q.sort 'urgency')}}selected{{/if}}>Urgency</option>
+          <option value="recipient" {{#if (eq q.sort 'recipient')}}selected{{/if}}>Recipient</option>
+          <option value="date" {{#if (eq q.sort 'date')}}selected{{/if}}>Date</option>
+          <option value="category" {{#if (eq q.sort 'category')}}selected{{/if}}>Category</option>
+        </select>
+      </label>
+      <button class="btn">Apply</button>
+    </form>
+  </details>
+
+  <h3>Assigned</h3>
+  <div class="cards">
+    {{#each deliveries}}
+      <div class="card {{urgencyClass this.urgency}}">
+        <div class="card-header"><strong>#{{this.id}} {{this.recipient_name}}</strong><span class="badge {{statusBadge this.status}}">{{this.status}}</span></div>
+        <div class="card-body">
+          <div><strong>Address:</strong> {{this.address}}</div>
+          <div><strong>Items:</strong> {{itemsList this.items}}</div>
+          <div><strong>Scheduled:</strong> {{formatDate this.scheduled_at}}</div>
+        </div>
+        <div class="card-actions">
+          <form method="post" action="/rider/deliveries/{{this.id}}/status" class="inline">
+            <select name="status">
+              <option value="Pending" {{#if (eq this.status 'Pending')}}selected{{/if}}>Pending</option>
+              <option value="In Progress" {{#if (eq this.status 'In Progress')}}selected{{/if}}>In Progress</option>
+              <option value="Delivered">Delivered</option>
+            </select>
+            <button class="btn btn-small">Update</button>
+          </form>
+          <form method="post" action="/rider/deliveries/{{this.id}}/delay" class="inline">
+            <input name="reason" placeholder="Delay reason">
+            <button class="btn btn-small">Notify Delay</button>
+          </form>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+
+  <h3>History</h3>
+  <div class="cards">
+    {{#each history}}
+      <div class="card">
+        <div class="card-header">
+          <strong>#{{this.id}} {{this.recipient_name}}</strong>
+          <span class="badge badge-delivered">Delivered</span>
+        </div>
+        <div class="card-body">
+          <div><strong>Delivered:</strong> {{formatDate this.delivered_at}}</div>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+</section>

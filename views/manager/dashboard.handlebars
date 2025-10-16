@@ -1,0 +1,138 @@
+<section>
+  <h2>Manager Dashboard</h2>
+  {{#if error}}<div class="alert alert-error">{{error}}</div>{{/if}}
+  <div class="grid two">
+    <div>
+      <h3>Create Delivery</h3>
+      <form method="post" action="/manager/deliveries" class="form">
+        <label>Recipient Name<input name="recipient_name" required></label>
+        <label>Phone<input name="recipient_phone" required></label>
+        <label>Address<textarea name="address" required></textarea></label>
+        <label>Items (comma or new-line separated)<textarea name="items" required></textarea></label>
+        <label>Category
+          <select name="category" required>
+            <option value="delicate">Delicate</option>
+            <option value="non-delicate">Non-delicate</option>
+          </select>
+        </label>
+        <label>Date & Time<input type="datetime-local" name="scheduled_at" required></label>
+        <label>Urgency
+          <select name="urgency" required>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </label>
+        <button class="btn">Add Delivery</button>
+      </form>
+    </div>
+    <div>
+      <h3>Assign Deliveries</h3>
+      <form method="post" action="/manager/deliveries/assign" class="form">
+        <label>Rider
+          <select name="rider_id" required>
+            <option value="">-- select rider --</option>
+            {{#each riders}}
+              <option value="{{this.id}}">{{this.name}} (Open: {{this.open_count}})</option>
+            {{/each}}
+          </select>
+        </label>
+        <div>
+          <p>Select deliveries by ID:</p>
+          <input name="delivery_ids" placeholder="e.g. 1,2,3">
+        </div>
+        <button class="btn">Assign</button>
+      </form>
+    </div>
+  </div>
+
+  <details class="filters" open>
+    <summary>Filters & Sorting</summary>
+    <form method="get" class="form inline">
+      <label>Status
+        <select name="status">
+          <option value="all">All</option>
+          <option value="Pending" {{#if (eq q.status 'Pending')}}selected{{/if}}>Pending</option>
+          <option value="In Progress" {{#if (eq q.status 'In Progress')}}selected{{/if}}>In Progress</option>
+          <option value="Delivered" {{#if (eq q.status 'Delivered')}}selected{{/if}}>Delivered</option>
+          <option value="Canceled" {{#if (eq q.status 'Canceled')}}selected{{/if}}>Canceled</option>
+        </select>
+      </label>
+      <label>Urgency
+        <select name="urgency">
+          <option value="all">All</option>
+          <option value="low" {{#if (eq q.urgency 'low')}}selected{{/if}}>Low</option>
+          <option value="medium" {{#if (eq q.urgency 'medium')}}selected{{/if}}>Medium</option>
+          <option value="high" {{#if (eq q.urgency 'high')}}selected{{/if}}>High</option>
+        </select>
+      </label>
+      <label>Category
+        <select name="category">
+          <option value="all">All</option>
+          <option value="delicate" {{#if (eq q.category 'delicate')}}selected{{/if}}>Delicate</option>
+          <option value="non-delicate" {{#if (eq q.category 'non-delicate')}}selected{{/if}}>Non-delicate</option>
+        </select>
+      </label>
+      <label>Rider
+        <select name="rider_id">
+          <option value="all">All</option>
+          {{#each riders}}
+            <option value="{{this.id}}" {{#if (eq ../q.rider_id this.id)}}selected{{/if}}>{{this.name}}</option>
+          {{/each}}
+        </select>
+      </label>
+      <label>Recipient<input name="recipient" value="{{q.recipient}}"></label>
+      <label>Date From<input type="datetime-local" name="date_from" value="{{q.date_from}}"></label>
+      <label>Date To<input type="datetime-local" name="date_to" value="{{q.date_to}}"></label>
+      <label>Sort
+        <select name="sort">
+          <option value="">Scheduled desc</option>
+          <option value="status" {{#if (eq q.sort 'status')}}selected{{/if}}>Status</option>
+          <option value="urgency" {{#if (eq q.sort 'urgency')}}selected{{/if}}>Urgency</option>
+          <option value="rider" {{#if (eq q.sort 'rider')}}selected{{/if}}>Rider</option>
+          <option value="recipient" {{#if (eq q.sort 'recipient')}}selected{{/if}}>Recipient</option>
+          <option value="date" {{#if (eq q.sort 'date')}}selected{{/if}}>Date</option>
+          <option value="category" {{#if (eq q.sort 'category')}}selected{{/if}}>Category</option>
+        </select>
+      </label>
+      <button class="btn">Apply</button>
+    </form>
+  </details>
+
+  <h3>All Deliveries</h3>
+  <div class="cards">
+    {{#each deliveries}}
+      <div class="card {{urgencyClass this.urgency}}">
+        <div class="card-header">
+          <strong>#{{this.id}} {{this.recipient_name}}</strong>
+          <span class="badge {{statusBadge this.status}}">{{this.status}}</span>
+        </div>
+        <div class="card-body">
+          <div><strong>Phone:</strong> {{this.recipient_phone}}</div>
+          <div><strong>Address:</strong> {{this.address}}</div>
+          <div><strong>Items:</strong> {{itemsList this.items}}</div>
+          <div><strong>Category:</strong> {{this.category}}</div>
+          <div><strong>Scheduled:</strong> {{formatDate this.scheduled_at}}</div>
+          <div><strong>Urgency:</strong> {{this.urgency}}</div>
+          <div><strong>Rider:</strong> {{#if this.rider_name}}{{this.rider_name}}{{else}}Unassigned{{/if}}</div>
+        </div>
+        <div class="card-actions">
+          <form method="post" action="/manager/deliveries/{{this.id}}/status" class="inline">
+            <select name="status">
+              <option value="Pending">Pending</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Delivered">Delivered</option>
+            </select>
+            <button class="btn btn-small">Update</button>
+          </form>
+          <a class="btn btn-small" href="/manager/deliveries/{{this.id}}/edit">Edit</a>
+          <a class="btn btn-small" href="/manager/deliveries/{{this.id}}/delays">Delays</a>
+          <form method="post" action="/manager/deliveries/{{this.id}}/cancel" class="inline">
+            <input name="reason" placeholder="Cancel reason">
+            <button class="btn btn-small btn-danger">Cancel</button>
+          </form>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+</section>

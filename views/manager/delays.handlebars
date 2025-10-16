@@ -1,0 +1,15 @@
+<section>
+  <h2>Delay Reports for Delivery #{{d.id}}</h2>
+  <div class="list">
+    {{#if delays.length}}
+      {{#each delays}}
+        <div class="list-item">
+          <div><strong>{{rider_name}}</strong> at {{formatDate created_at}}</div>
+          <div>{{reason}}</div>
+        </div>
+      {{/each}}
+    {{else}}
+      <p>No delay reports.</p>
+    {{/if}}
+  </div>
+</section>

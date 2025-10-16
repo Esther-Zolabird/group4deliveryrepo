@@ -1,0 +1,10 @@
+<section class="auth">
+  <h2>Login</h2>
+  {{#if error}}<div class="alert alert-error">{{error}}</div>{{/if}}
+  <form method="post" action="/login" class="form">
+    <label>Email<input type="email" name="email" required></label>
+    <label>Password<input type="password" name="password" required></label>
+    <button type="submit" class="btn">Login</button>
+  </form>
+  <p>No account? <a href="/register">Register</a></p>
+</section>

@@ -1,0 +1,37 @@
+{
+  "name": "workspace",
+  "version": "1.0.0",
+  "description": "Delivery Management System  A full-stack web app using Node.js, Express, Handlebars, and CSS for managing deliveries. Managers assign and track deliveries, riders update status and report delays, and urgency is color-coded. Includes secure login, responsive navbar, and database storage for efficient, real-time logistics management.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "init-db": "node scripts/init-db.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Esther-Zolabird/group4deliveryrepo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Esther-Zolabird/group4deliveryrepo/issues"
+  },
+  "homepage": "https://github.com/Esther-Zolabird/group4deliveryrepo#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "connect-sqlite3": "^0.9.16",
+    "dayjs": "^1.11.18",
+    "express": "^5.1.0",
+    "express-handlebars": "^8.0.3",
+    "express-session": "^1.18.2",
+    "method-override": "^3.0.0",
+    "socket.io": "^4.8.1",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
